@@ -22,7 +22,7 @@ def local_thickness_edt(data: np.ndarray, parallel: int = 1):
 
     dilated = initial_distance_field.copy()
     for r in range(2, max_radius + 1):
-        df = edt.edtsq(initial_distance_field <= r, parallel=parallel)
+        df = edt.edtsq(initial_distance_field < r, parallel=parallel)
         dilated[df <= r * r] = r
     return dilated
 
@@ -47,7 +47,7 @@ def local_thickness_scipy(data: np.ndarray) -> np.ndarray:
 
     dilated = initial_distance_field.copy()
     for r in range(2, max_radius + 1):
-        df = ndimage.distance_transform_edt(initial_distance_field <= r)
+        df = ndimage.distance_transform_edt(initial_distance_field < r)
         assert isinstance(df, np.ndarray)
 
         dilated[df <= r] = r
@@ -75,7 +75,7 @@ def local_thickness_cupy(data: np.ndarray) -> np.ndarray:
     dilated_cp = initial_distance_field_cp.copy()
     for r in cp.arange(2, max_radius + 1, dtype=dilated_cp.dtype):
         ndimage_cp.distance_transform_edt(
-            initial_distance_field_cp <= r,
+            initial_distance_field_cp < r,
             float64_distances=False,
             distances=distance_field_f32_cp,
         )
