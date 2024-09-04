@@ -58,8 +58,10 @@ def create_test_volume(
     return vol.squeeze()
 
 
-def local_thickness_ref(data: np.ndarray) -> np.ndarray:
+def local_thickness_ref(shape, seed=None):
     from scipy import ndimage
+
+    data = create_test_volume(shape, seed=seed)
 
     distance_field_f64 = ndimage.distance_transform_edt(data)
     assert isinstance(distance_field_f64, np.ndarray)
@@ -82,22 +84,32 @@ def local_thickness_ref(data: np.ndarray) -> np.ndarray:
         assert isinstance(df, np.ndarray)
 
         dilated[df < r] = r
-    return dilated
+    return data, dilated
 
 
-@pytest.mark.parametrize(
-    "data",
-    [
-        create_test_volume((200, 200), seed=42),
-        create_test_volume((50, 50, 50), seed=42),
-        create_test_volume((100, 100, 100), seed=42),
-    ],
-)
-@pytest.mark.parametrize(
-    "implementation",
-    ["edt", "scipy", "cupy"],
-)
-def test_local_thickness_edt(data, implementation):
-    thickness_ref = local_thickness_ref(data)
-    thickness = ltedt.local_thickness(data, implementation=implementation, parallel=2)
+TEST_DATA = [
+    local_thickness_ref((200, 200), seed=42),
+    local_thickness_ref((1000, 1000), seed=42),
+    local_thickness_ref((50, 50, 50), seed=42),
+    local_thickness_ref((100, 100, 100), seed=42),
+    local_thickness_ref((200, 200, 200), seed=42),
+]
+
+
+@pytest.mark.parametrize("data,thickness_ref", TEST_DATA)
+@pytest.mark.parametrize("parallel", [1, 2, 4])
+def test_local_thickness_edt(data, thickness_ref, parallel, benchmark):
+    thickness = benchmark(ltedt.local_thickness, data, "edt", parallel)
+    np.testing.assert_array_equal(thickness_ref, thickness)
+
+
+@pytest.mark.parametrize("data,thickness_ref", TEST_DATA)
+def test_local_thickness_scipy(data, thickness_ref, benchmark):
+    thickness = benchmark(ltedt.local_thickness, data, "scipy")
+    np.testing.assert_array_equal(thickness_ref, thickness)
+
+
+@pytest.mark.parametrize("data,thickness_ref", TEST_DATA)
+def test_local_thickness_cupy(data, thickness_ref, benchmark):
+    thickness = benchmark(ltedt.local_thickness, data, "cupy")
     np.testing.assert_array_equal(thickness_ref, thickness)
