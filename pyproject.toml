@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ltedt"
+version = "0.1.0"
+dependencies = [
+    "numpy",
+    "scipy",
+    "edt",
+]
+description = "Fast local thickness using Euclidean distance transform"
+authors = [{name = "Niels Jeppesen", email = "niejep@dtu.dk"}]
+license = {file = "LICENSE"}
+requires-python = ">=3.9"
+readme = "README.md"
+keywords = ["local thickness", "distance transform", "euclidean distance", "morphology", "image processing"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Image Processing",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
+
+[project.optional-dependencies]
+cupy = ["cupy"]
+cupy-cuda11x = ["cupy-cuda11x"]
+cupy-cuda12x = ["cupy-cuda12x"]
+
+[project.urls]
+Repository = "https://github.com/Skielex/ltedt"
