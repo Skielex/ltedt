@@ -36,42 +36,42 @@ The tables below contains benchmark results for all three EDT implementations (i
 Benchmarks were run on an AMD Ryzen 9 5900X 12-Core CPU and Nvidia RTX 2700 SUPER GPU running Windows 11. Initial testing on a Nvidia A100 GPU indicates upwards of a 1000x speed-up compared to using the CPU implementations on large volumes (larger than 1000³).
 
 ### shape: (200, 200), sigma: 10
-| Test Name                                  |   Median Time (s) |   Relative |   Min Time (s) |   Max Time (s) |   Mean Time (s) |   StdDev (s) |
-|:-------------------------------------------|------------------:|-----------:|---------------:|---------------:|----------------:|-------------:|
-| test_local_thickness[edt-2-data_params0]   |             0.017 |          1 |          0.017 |          0.019 |           0.017 |        0.000 |
-| test_local_thickness[edt-4-data_params0]   |             0.018 |          1 |          0.018 |          0.019 |           0.018 |        0.000 |
-| test_local_thickness[cupy-1-data_params0]  |             0.018 |          1 |          0.017 |          0.021 |           0.019 |        0.001 |
-| test_local_thickness[edt-1-data_params0]   |             0.019 |          1 |          0.019 |          0.020 |           0.019 |        0.000 |
-| test_local_thickness[scipy-1-data_params0] |             0.020 |          1 |          0.020 |          0.022 |           0.021 |        0.000 |
+| Test Name                                  |   Median time (s) |   Relative |   Min time (s) |   Max time (s) |   Mean time (s) |
+|:-------------------------------------------|------------------:|-----------:|---------------:|---------------:|----------------:|
+| test_local_thickness[edt-2-data_params0]   |             0.017 |          1 |          0.017 |          0.019 |           0.017 |
+| test_local_thickness[edt-4-data_params0]   |             0.018 |          1 |          0.018 |          0.019 |           0.018 |
+| test_local_thickness[cupy-1-data_params0]  |             0.018 |          1 |          0.017 |          0.021 |           0.019 |
+| test_local_thickness[edt-1-data_params0]   |             0.019 |          1 |          0.019 |          0.020 |           0.019 |
+| test_local_thickness[scipy-1-data_params0] |             0.020 |          1 |          0.020 |          0.022 |           0.021 |
 ### shape: (1000, 1000), sigma: 20
-| Test Name                                  |   Median Time (s) |   Relative |   Min Time (s) |   Max Time (s) |   Mean Time (s) |   StdDev (s) |
-|:-------------------------------------------|------------------:|-----------:|---------------:|---------------:|----------------:|-------------:|
-| test_local_thickness[cupy-1-data_params1]  |             0.054 |          1 |          0.053 |          0.059 |           0.055 |        0.002 |
-| test_local_thickness[edt-4-data_params1]   |             0.598 |         11 |          0.596 |          0.600 |           0.598 |        0.002 |
-| test_local_thickness[edt-2-data_params1]   |             0.674 |         13 |          0.670 |          0.682 |           0.675 |        0.004 |
-| test_local_thickness[edt-1-data_params1]   |             0.834 |         16 |          0.827 |          0.843 |           0.833 |        0.007 |
-| test_local_thickness[scipy-1-data_params1] |             1.704 |         32 |          1.694 |          1.706 |           1.702 |        0.005 |
+| Test Name                                  |   Median time (s) |   Relative |   Min time (s) |   Max time (s) |   Mean time (s) |
+|:-------------------------------------------|------------------:|-----------:|---------------:|---------------:|----------------:|
+| test_local_thickness[cupy-1-data_params1]  |             0.054 |          1 |          0.053 |          0.059 |           0.055 |
+| test_local_thickness[edt-4-data_params1]   |             0.598 |         11 |          0.596 |          0.600 |           0.598 |
+| test_local_thickness[edt-2-data_params1]   |             0.674 |         13 |          0.670 |          0.682 |           0.675 |
+| test_local_thickness[edt-1-data_params1]   |             0.834 |         16 |          0.827 |          0.843 |           0.833 |
+| test_local_thickness[scipy-1-data_params1] |             1.704 |         32 |          1.694 |          1.706 |           1.702 |
 ### shape: (50, 50, 50), sigma: 7
-| Test Name                                  |   Median Time (s) |   Relative |   Min Time (s) |   Max Time (s) |   Mean Time (s) |   StdDev (s) |
-|:-------------------------------------------|------------------:|-----------:|---------------:|---------------:|----------------:|-------------:|
-| test_local_thickness[cupy-1-data_params2]  |             0.008 |          1 |          0.008 |          0.019 |           0.010 |        0.004 |
-| test_local_thickness[edt-2-data_params2]   |             0.052 |          6 |          0.051 |          0.055 |           0.053 |        0.001 |
-| test_local_thickness[edt-4-data_params2]   |             0.054 |          7 |          0.051 |          0.058 |           0.054 |        0.002 |
-| test_local_thickness[edt-1-data_params2]   |             0.065 |          8 |          0.064 |          0.067 |           0.065 |        0.001 |
-| test_local_thickness[scipy-1-data_params2] |             0.079 |         10 |          0.077 |          0.081 |           0.079 |        0.001 |
+| Test Name                                  |   Median time (s) |   Relative |   Min time (s) |   Max time (s) |   Mean time (s) |
+|:-------------------------------------------|------------------:|-----------:|---------------:|---------------:|----------------:|
+| test_local_thickness[cupy-1-data_params2]  |             0.008 |          1 |          0.008 |          0.019 |           0.010 |
+| test_local_thickness[edt-2-data_params2]   |             0.052 |          6 |          0.051 |          0.055 |           0.053 |
+| test_local_thickness[edt-4-data_params2]   |             0.054 |          7 |          0.051 |          0.058 |           0.054 |
+| test_local_thickness[edt-1-data_params2]   |             0.065 |          8 |          0.064 |          0.067 |           0.065 |
+| test_local_thickness[scipy-1-data_params2] |             0.079 |         10 |          0.077 |          0.081 |           0.079 |
 ### shape: (250, 250, 250), sigma: 14
-| Test Name                                  |   Median Time (s) |   Relative |   Min Time (s) |   Max Time (s) |   Mean Time (s) |   StdDev (s) |
-|:-------------------------------------------|------------------:|-----------:|---------------:|---------------:|----------------:|-------------:|
-| test_local_thickness[cupy-1-data_params3]  |             0.229 |          1 |          0.227 |          0.233 |           0.229 |        0.002 |
-| test_local_thickness[edt-4-data_params3]   |             7.137 |         31 |          7.097 |          7.270 |           7.159 |        0.067 |
-| test_local_thickness[edt-2-data_params3]   |             9.105 |         40 |          9.074 |          9.143 |           9.106 |        0.025 |
-| test_local_thickness[edt-1-data_params3]   |            14.129 |         62 |         14.036 |         14.234 |          14.122 |        0.082 |
-| test_local_thickness[scipy-1-data_params3] |            36.873 |        161 |         36.793 |         36.895 |          36.861 |        0.041 |
+| Test Name                                  |   Median time (s) |   Relative |   Min time (s) |   Max time (s) |   Mean time (s) |
+|:-------------------------------------------|------------------:|-----------:|---------------:|---------------:|----------------:|
+| test_local_thickness[cupy-1-data_params3]  |             0.229 |          1 |          0.227 |          0.233 |           0.229 |
+| test_local_thickness[edt-4-data_params3]   |             7.137 |         31 |          7.097 |          7.270 |           7.159 |
+| test_local_thickness[edt-2-data_params3]   |             9.105 |         40 |          9.074 |          9.143 |           9.106 |
+| test_local_thickness[edt-1-data_params3]   |            14.129 |         62 |         14.036 |         14.234 |          14.122 |
+| test_local_thickness[scipy-1-data_params3] |            36.873 |        161 |         36.793 |         36.895 |          36.861 |
 ### shape: (500, 500, 500), sigma: 20
-| Test Name                                  |   Median Time (s) |   Relative |   Min Time (s) |   Max Time (s) |   Mean Time (s) |   StdDev (s) |
-|:-------------------------------------------|------------------:|-----------:|---------------:|---------------:|----------------:|-------------:|
-| test_local_thickness[cupy-1-data_params4]  |             2.618 |          1 |          2.583 |          2.661 |           2.620 |        0.030 |
-| test_local_thickness[edt-4-data_params4]   |            78.074 |         30 |         77.908 |         78.275 |          78.065 |        0.156 |
-| test_local_thickness[edt-2-data_params4]   |           101.821 |         39 |        101.791 |        101.949 |         101.862 |        0.078 |
-| test_local_thickness[edt-1-data_params4]   |           157.758 |         60 |        157.393 |        158.106 |         157.719 |        0.296 |
-| test_local_thickness[scipy-1-data_params4] |           528.846 |        202 |        524.870 |        534.517 |         528.780 |        3.952 |
+| Test Name                                  |   Median time (s) |   Relative |   Min time (s) |   Max time (s) |   Mean time (s) |
+|:-------------------------------------------|------------------:|-----------:|---------------:|---------------:|----------------:|
+| test_local_thickness[cupy-1-data_params4]  |             2.618 |          1 |          2.583 |          2.661 |           2.620 |
+| test_local_thickness[edt-4-data_params4]   |            78.074 |         30 |         77.908 |         78.275 |          78.065 |
+| test_local_thickness[edt-2-data_params4]   |           101.821 |         39 |        101.791 |        101.949 |         101.862 |
+| test_local_thickness[edt-1-data_params4]   |           157.758 |         60 |        157.393 |        158.106 |         157.719 |
+| test_local_thickness[scipy-1-data_params4] |           528.846 |        202 |        524.870 |        534.517 |         528.780 |
