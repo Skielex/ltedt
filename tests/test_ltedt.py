@@ -1,67 +1,17 @@
+from functools import lru_cache
+
 import numpy as np
 import pytest
-import scipy.ndimage
 
 import ltedt
+from ltedt.util import create_test_volume
 
 
-def create_test_volume(
-    shape: tuple[int, int, int] | tuple[int, int],
-    sigma: float = 7,
-    threshold: float = 0,
-    boundary: float = 0,
-    frame: bool = True,
-    seed: int | None = None,
-):
-    """Creates test volume for local thickness and porosity analysis.
-    Arguments:
-        shape: tuple giving the size of the volume
-        sigma: smoothing scale, higher value - smoother objects
-        threshold: a value close to 0, larger value - less material (smaller objects)
-        boundary: strength of imposing object boundary pulled inwards
-        frame: one-voxel frame of False
-    Returns:
-        a test volume
-    Example uses:
-        vol = create_test_volume((150, 100, 50), boundary=0.1)
-        img = create_test_volume((50, 50, 1), frame=False).squeeze()
-    Authors: vand@dtu.dk, 2019, niejep@dtu.dk, 2024
-    """
-
-    if len(shape) == 3:
-        r = np.fromfunction(
-            lambda x, y, z: (
-                (x / (shape[0] - 1) - 0.5) ** 2 + (y / (shape[1] - 1) - 0.5) ** 2 + (z / (shape[2] - 1) - 0.5) ** 2
-            )
-            ** 0.5,
-            shape,
-            dtype=int,
-        )
-    elif len(shape) == 2:
-        r = np.fromfunction(
-            lambda x, y: ((x / (shape[0] - 1) - 0.5) ** 2 + (y / (shape[1] - 1) - 0.5) ** 2) ** 0.5,
-            shape,
-            dtype=int,
-        )
-
-    prng = np.random.RandomState(seed)  # pseudo random number generator
-    vol = prng.standard_normal(shape)
-    vol[r > 0.5] -= boundary
-    vol = scipy.ndimage.gaussian_filter(vol, sigma, mode="constant", cval=-boundary)
-    vol = vol > threshold
-    if frame:
-        vol[[0, -1]] = False
-        vol[:, [0, -1]] = False
-        if len(shape) == 3:
-            vol[:, :, [0, -1]] = False
-
-    return vol.squeeze()
-
-
-def local_thickness_ref(shape, seed=None):
+@lru_cache
+def local_thickness_ref(shape, sigma, seed):
     from scipy import ndimage
 
-    data = create_test_volume(shape, seed=seed)
+    data = create_test_volume(shape, sigma=sigma, seed=seed)
 
     distance_field_f64 = ndimage.distance_transform_edt(data)
     assert isinstance(distance_field_f64, np.ndarray)
@@ -87,29 +37,28 @@ def local_thickness_ref(shape, seed=None):
     return data, dilated
 
 
-TEST_DATA = [
-    local_thickness_ref((200, 200), seed=42),
-    local_thickness_ref((1000, 1000), seed=42),
-    local_thickness_ref((50, 50, 50), seed=42),
-    local_thickness_ref((100, 100, 100), seed=42),
-    local_thickness_ref((200, 200, 200), seed=42),
+TEST_DATA_PARAMS = [
+    ((200, 200), 10, 42),
+    ((1000, 1000), 20, 42),
+    # ((4000, 4000), 40, 42),
+    ((50, 50, 50), 7, 42),
+    ((250, 250, 250), 14, 42),
+    # ((1000, 1000, 1000), 28, 42),
+]
+
+TEST_FUNCTION_PARAMS = [
+    ("edt", 1),
+    ("edt", 2),
+    ("edt", 4),
+    ("scipy", None),
+    ("cupy", None),
 ]
 
 
-@pytest.mark.parametrize("data,thickness_ref", TEST_DATA)
-@pytest.mark.parametrize("parallel", [1, 2, 4])
-def test_local_thickness_edt(data, thickness_ref, parallel, benchmark):
-    thickness = benchmark(ltedt.local_thickness, data, "edt", parallel)
-    np.testing.assert_array_equal(thickness_ref, thickness)
-
-
-@pytest.mark.parametrize("data,thickness_ref", TEST_DATA)
-def test_local_thickness_scipy(data, thickness_ref, benchmark):
-    thickness = benchmark(ltedt.local_thickness, data, "scipy")
-    np.testing.assert_array_equal(thickness_ref, thickness)
-
-
-@pytest.mark.parametrize("data,thickness_ref", TEST_DATA)
-def test_local_thickness_cupy(data, thickness_ref, benchmark):
-    thickness = benchmark(ltedt.local_thickness, data, "cupy")
+@pytest.mark.parametrize("data_params", TEST_DATA_PARAMS)
+@pytest.mark.parametrize("implementation,parallel", TEST_FUNCTION_PARAMS)
+def test_local_thickness_edt(data_params, implementation, parallel, benchmark):
+    shape, sigma, seed = data_params
+    data, thickness_ref = local_thickness_ref(shape, sigma=sigma, seed=seed)
+    thickness = benchmark(ltedt.local_thickness, data, implementation, parallel)
     np.testing.assert_array_equal(thickness_ref, thickness)
