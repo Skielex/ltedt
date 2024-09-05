@@ -16,12 +16,12 @@ def convert_benchmark_to_dataframe(json_file):
         shape, sigma, seed = benchmark["params"]["data_params"]
         benchmark_data.append(
             {
-                "Test Name": benchmark["name"],
+                "Benchmark name": benchmark["name"][21:-1],
                 "data_params": f"shape: {tuple(shape)}, sigma: {sigma}",
-                "Min Time (s)": benchmark["stats"]["min"],
-                "Median Time (s)": benchmark["stats"]["median"],
-                "Max Time (s)": benchmark["stats"]["max"],
-                "Mean Time (s)": benchmark["stats"]["mean"],
+                "Min time (s)": benchmark["stats"]["min"],
+                "Med time (s)": benchmark["stats"]["median"],
+                "Max time (s)": benchmark["stats"]["max"],
+                "Mean time (s)": benchmark["stats"]["mean"],
                 "StdDev (s)": benchmark["stats"]["stddev"],
             }
         )
@@ -43,21 +43,20 @@ for data_param in df["data_params"].unique():
     print(f"### {data_param}")
 
     data_param_df = data_param_df.drop(columns=["data_params"])
-    data_param_df = data_param_df.sort_values("Median Time (s)")
+    data_param_df = data_param_df.sort_values("Med time (s)")
 
     data_param_df["Relative"] = (
-        (data_param_df["Median Time (s)"] / data_param_df["Median Time (s)"].min()).round().astype(int)
+        (data_param_df["Med time (s)"] / data_param_df["Med time (s)"].min()).round().astype(int)
     )
     # MOve columns second
     data_param_df = data_param_df[
         [
-            "Test Name",
-            "Median Time (s)",
+            "Benchmark name",
+            "Med time (s)",
             "Relative",
-            "Min Time (s)",
-            "Max Time (s)",
-            "Mean Time (s)",
-            "StdDev (s)",
+            "Min time (s)",
+            "Max time (s)",
+            "Mean time (s)",
         ]
     ]
 
