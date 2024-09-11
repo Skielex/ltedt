@@ -31,7 +31,7 @@ The `local_thickness` function support three different implementations of EDT ba
 Which EDT implementation to use is determined by the `implementation` parameter of the `local_thickness` function.
 
 ## Limitations
-- Thicknesses are always as integers, decimal values are not support.
+- Thicknesses are always returned as integers, decimal values are not support.
 
 ## Benchmark results
 The tables below contains benchmark results for all three EDT implementations (including varying thread counts for `edt`). The results show that the implementation doesn't matter much for smaller datasets, but has varries by over 100x for larger datasets.
