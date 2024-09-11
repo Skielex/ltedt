@@ -75,3 +75,6 @@ Benchmarks were run on an AMD Ryzen 9 5900X 12-Core CPU and Nvidia RTX 2700 SUPE
 | edt-2-data_params4   |        101.821 |         39 |        101.791 |        101.949 |         101.862 |
 | edt-1-data_params4   |        157.758 |         60 |        157.393 |        158.106 |         157.719 |
 | scipy-1-data_params4 |        528.846 |        202 |        524.870 |        534.517 |         528.780 |
+
+## Related work
+This work was inspired by the [`localthickness`](https://github.com/vedranaa/local-thickness) package.
